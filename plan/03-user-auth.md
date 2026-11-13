@@ -1,5 +1,7 @@
 # 03 — Autentikasi User (Breeze + Google Socialite)
 
+> **Status:** ✅ Done (2026-11-13) — Auth Breeze (register/login/logout) berfungsi. Google Socialite sudah ter-scaffold, **tinggal isi `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`** (Google Cloud Console) agar tombol "Masuk dengan Google" aktif.
+
 ## Tujuan
 Menyediakan register & login email/password (Laravel Breeze) serta login via Google OAuth (Socialite) untuk user biasa, dengan role default `member`.
 
@@ -22,16 +24,18 @@ Menyediakan register & login email/password (Laravel Breeze) serta login via Goo
 - `app/Providers/Filament/AdminPanelProvider.php` (edit) — batasi akses panel hanya role `admin`.
 
 ## Langkah Eksekusi
-- [ ] `composer require laravel/breeze --dev` lalu `php artisan breeze:install blade`.
-- [ ] `composer require laravel/socialite`.
-- [ ] Tambah blok `google` di `config/services.php` (client_id, client_secret, redirect).
-- [ ] Isi `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI` di `.env` (dari Google Cloud Console).
-- [ ] Buat `GoogleController` (redirect ke Google + callback: buat/link user, set `google_id`, `avatar`, role default `member`).
-- [ ] Tambah route `GET /auth/google` & `GET /auth/google/callback`.
-- [ ] Tambah link login/register di header layout.
-- [ ] Batasi panel Filament `/admin` hanya untuk role `admin` (mis. via `->authMiddleware()` atau policy `canAccessPanel`).
-- [ ] `php artisan migrate`, `php artisan optimize:clear`.
-- [ ] Test: register, login, logout, dan login Google.
+- [x] `composer require laravel/breeze --dev` lalu `php artisan breeze:install blade`.
+- [x] `composer require laravel/socialite`.
+- [x] Tambah blok `google` di `config/services.php` (client_id, client_secret, redirect).
+- [ ] Isi `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI` di `.env` (dari Google Cloud Console) — **menunggu kredensial dari user**.
+- [x] Buat `GoogleController` (redirect + callback: buat/link user, set `google_id`, `avatar`, role `member`).
+- [x] Tambah route `GET /auth/google` & `GET /auth/google/callback`.
+- [x] Navbar: tamu → Login/Register; login → nama + Logout; admin → link Admin.
+- [x] Redirect setelah login/register → `/katalog`.
+- [x] Tema Warm Neutral pada layout guest & view auth (background `#FAF8F5`, Inter/Lora, primary biru).
+- [x] Batasi panel Filament `/admin` hanya untuk role `admin` (User implements `FilamentUser::canAccessPanel`).
+- [x] `php artisan migrate`, `php artisan optimize:clear`, `npm run build`.
+- [x] Test register/login/logout (kernel render) + navbar state; Google login **pending kredensial**.
 
 ## Acceptance Criteria
 - User bisa register & login dengan email/password.

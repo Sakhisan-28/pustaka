@@ -101,10 +101,10 @@
                         <span>📚</span> Pinjam Buku
                     </button>
                     @if($book->file_url)
-                        <button type="button"
-                                class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border border-warm-300 text-warm-700 rounded-lg font-medium hover:bg-warm-100 transition">
+                        <a href="{{ route('books.read', $book) }}"
+                           class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border border-warm-300 text-warm-700 rounded-lg font-medium hover:bg-warm-100 transition">
                             <span>📖</span> Baca Sekarang
-                        </button>
+                        </a>
                     @endif
                 @else
                     <button type="button"

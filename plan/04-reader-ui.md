@@ -1,5 +1,7 @@
 # 04 — Reader PDF / EPUB di Browser
 
+> **Status:** ✅ Done (2026-11-13) — Reader PDF & EPUB, toolbar (font size, dark mode), navigasi, dan simpan progress (debounce 2s) selesai. Verifikasi sisi server: halaman + endpoint file 200 dengan content-type benar. Rendering aktual PDF/EPUB perlu dicek di browser.
+
 ## Tujuan
 Menyediakan halaman baca in-browser untuk file PDF & EPUB dengan navigasi halaman, kontrol tampilan (font size, dark mode), dan penyimpanan progress otomatis.
 
@@ -20,15 +22,16 @@ Menyediakan halaman baca in-browser untuk file PDF & EPUB dengan navigasi halama
 - `package.json` (edit) — tambah `pdfjs-dist` & `epubjs`.
 
 ## Langkah Eksekusi
-- [ ] `npm install pdfjs-dist epubjs`.
-- [ ] Buat `ReaderController@show`: validasi akses (login + diizinkan membaca), lewarkan URL file.
-- [ ] Buat `reader/index.blade.php`: container reader + toolbar (font size, line height, dark/light toggle).
-- [ ] Implement PDF.js viewer (render canvas, navigasi halaman, zoom).
-- [ ] Implement epub.js viewer (reflow, navigasi).
-- [ ] Deteksi tipe file (PDF vs EPUB) lalu pilih viewer yang sesuai.
-- [ ] Simpan progress otomatis (debounce 2s) via `ReadingProgressController` saat halaman berubah.
-- [ ] Load progress terakhir saat reader dibuka (lanjut dari halaman terakhir).
-- [ ] Tombol kembali ke halaman detail / breadcrumb.
+- [x] `npm install pdfjs-dist epubjs`.
+- [x] Buat `ReaderController@show`: validasi akses (login + file tersedia), deteksi tipe, lewarkan URL file + progress awal.
+- [x] Buat `reader/index.blade.php`: container reader + toolbar (font size, dark/light toggle, indikator halaman) + navigasi prev/next.
+- [x] Implement PDF.js viewer (`pdf-viewer.js` — render canvas, navigasi halaman, invert untuk dark mode).
+- [x] Implement epub.js viewer (`epub-viewer.js` — render, navigasi, tema dark/light, font size).
+- [x] Deteksi tipe file (PDF vs EPUB) lalu pilih viewer yang sesuai.
+- [x] Simpan progress otomatis (debounce 2s) via `ReadingProgressController` (POST `/baca/{book}/progress`).
+- [x] Load progress terakhir saat reader dibuka (lanjut dari halaman/halaman terakhir).
+- [x] Tombol kembali ke halaman detail + endpoint file ter-autentikasi (`/baca/{book}/file`).
+- [x] Code-split: reader (PDF.js/epub.js) hanya dimuat di halaman reader (dynamic import di `app.js`).
 
 ## Acceptance Criteria
 - Buka `/baca/{book}` untuk file PDF → ter-render via PDF.js.

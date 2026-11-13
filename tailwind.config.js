@@ -1,9 +1,16 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
+
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
-        './resources/**/*.blade.php',
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
         './resources/**/*.js',
     ],
+
     theme: {
         extend: {
             colors: {
@@ -24,9 +31,10 @@ export default {
             },
         },
         fontFamily: {
-            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-            serif: ['Lora', 'ui-serif', 'Georgia', 'serif'],
+            sans: ['Inter', ...defaultTheme.fontFamily.sans],
+            serif: ['Lora', ...defaultTheme.fontFamily.serif],
         },
     },
-    plugins: [],
+
+    plugins: [forms],
 };
