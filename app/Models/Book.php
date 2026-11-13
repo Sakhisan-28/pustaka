@@ -45,4 +45,47 @@ class Book extends Model
     {
         return $this->hasMany(Bookmark::class);
     }
+
+    /**
+     * Filter katalog: search (judul/penulis/ISBN/kategori), filter kategori,
+     * filter ketersediaan, dan sorting.
+     */
+    public function scopeFilter($query, array $filters)
+    {
+        $query
+            ->when($filters['search'] ?? null, function ($q, $search) {
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('title', 'ilike', "%{$search}%")
+                        ->orWhere('author', 'ilike', "%{$search}%")
+                        ->orWhere('isbn', 'ilike', "%{$search}%")
+                        ->orWhereHas('category', fn ($c) => $c->where('name', 'ilike', "%{$search}%"));
+                });
+            })
+            ->when($filters['category'] ?? null, fn ($q, $category) => $q->whereHas(
+                'category',
+                fn ($c) => $c->where('slug', $category)
+            ))
+            ->when($filters['available'] ?? false, fn ($q) => $q->where('available_copies', '>', 0))
+            ->when($filters['sort'] ?? null, fn ($q, $sort) => match ($sort) {
+                'title' => $q->orderBy('title'),
+                'popular' => $q->withCount('borrowings')->orderByDesc('borrowings_count'),
+                default => $q->latest(),
+            }, fn ($q) => $q->latest());
+    }
+
+    /**
+     * Apakah buku masih tersedia untuk dipinjam.
+     */
+    public function isAvailable(): bool
+    {
+        return $this->available_copies > 0;
+    }
+
+    /**
+     * Label status ketersediaan untuk ditampilkan.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        return $this->isAvailable() ? 'Tersedia' : 'Stok Habis';
+    }
 }

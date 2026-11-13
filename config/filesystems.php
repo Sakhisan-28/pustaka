@@ -56,6 +56,18 @@ return [
             'throw' => false,
         ],
 
+        'upstash' => [
+            'driver' => 's3',
+            'key' => env('UPSTASH_BLOB_TOKEN'),
+            'secret' => env('UPSTASH_BLOB_TOKEN'),
+            'region' => 'auto',
+            'bucket' => env('UPSTASH_BUCKET'),
+            'endpoint' => env('UPSTASH_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'url' => env('UPSTASH_ENDPOINT') . '/' . env('UPSTASH_BUCKET'),
+            'throw' => false,
+        ],
+
     ],
 
     /*

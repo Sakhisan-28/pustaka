@@ -42,10 +42,12 @@ class BookResource extends Resource
                 FileUpload::make('file_url')
                     ->directory('books')
                     ->acceptedFileTypes(['application/pdf', 'application/epub+zip'])
+                    ->disk('local')
                     ->nullable(),
                 FileUpload::make('cover_url')
                     ->directory('covers')
                     ->image()
+                    ->disk('public')
                     ->nullable(),
             ]);
     }
