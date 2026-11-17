@@ -32,4 +32,19 @@ class Borrowing extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'borrowed_at' => 'datetime',
+            'due_at' => 'datetime',
+            'returned_at' => 'datetime',
+            'fine_amount' => 'decimal:2',
+        ];
+    }
 }

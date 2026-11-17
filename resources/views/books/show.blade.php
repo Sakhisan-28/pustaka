@@ -93,23 +93,43 @@
                 </p>
             </div>
 
-            {{-- Tombol aksi (belum fungsional — dihubungkan di task 03 & 05) --}}
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            {{-- Tombol aksi --}}
+            @php
+                $activeBorrowing = auth()->check() && $book->borrows(auth()->user());
+            @endphp
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-3 flex-wrap">
                 @if($book->isAvailable())
-                    <button type="button"
-                            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition">
-                        <span>📚</span> Pinjam Buku
-                    </button>
-                    @if($book->file_url)
-                        <a href="{{ route('books.read', $book) }}"
-                           class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border border-warm-300 text-warm-700 rounded-lg font-medium hover:bg-warm-100 transition">
-                            <span>📖</span> Baca Sekarang
+                    @auth
+                        @if($activeBorrowing)
+                            <span class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-warm-100 border border-warm-300 text-warm-500 rounded-lg font-medium cursor-default">
+                                ✓ Anda sedang meminjam buku ini
+                            </span>
+                            @if($book->file_url)
+                                <a href="{{ route('books.read', $book) }}"
+                                   class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition">
+                                    <span>📖</span> Baca Sekarang
+                                </a>
+                            @endif
+                        @else
+                            <form method="POST" action="{{ route('books.borrow', $book) }}">
+                                @csrf
+                                <button type="submit"
+                                        class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition">
+                                    <span>📚</span> Pinjam Buku
+                                </button>
+                            </form>
+                        @endif
+                    @else
+                        <a href="{{ route('login') }}"
+                           class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition">
+                            <span>📚</span> Login untuk Meminjam
                         </a>
-                    @endif
+                    @endauth
                 @else
-                    <button type="button"
-                            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-amber-700 transition">
-                        <span>🔔</span> Reservasi
+                    <button type="button" disabled
+                            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-warm-200 text-warm-400 rounded-lg font-medium cursor-not-allowed">
+                        Stok Habis
                     </button>
                 @endif
 
@@ -120,7 +140,7 @@
             </div>
 
             <p class="text-xs text-warm-400 mt-3">
-                Tombol pinjam/reservasi & baca akan aktif setelah login (fitur dihubungkan pada task berikutnya).
+                Durasi pinjam 7 hari · Maksimal 3 buku aktif · Denda keterlambatan Rp 1.000/hari.
             </p>
         </div>
     </div>

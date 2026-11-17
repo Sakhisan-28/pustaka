@@ -1,5 +1,7 @@
 # 05 — Logika Peminjaman, Pengembalian & Denda
 
+> **Status:** ✅ Done (2026-11-13) — Inti sirkulasi selesai: pinjam (stok, anti-duplikat, max 3, blokir keterlambatan >7 hari), kembali, denda Rp1.000/hari, tombol detail, dan halaman "Buku Saya". Extend, antrian reservasi, cron auto-return, dan email **ditunda** (tidak diminta pada iterasi ini).
+
 ## Tujuan
 Mengimplementasikan alur pinjam buku, pengembalian, perpanjangan (extend), serta perhitungan denda dan auto-return untuk pinjaman yang melewati due date.
 
@@ -21,15 +23,17 @@ Mengimplementasikan alur pinjam buku, pengembalian, perpanjangan (extend), serta
 - `resources/views/emails/borrowing-reminder.blade.php` (buat) — template email.
 
 ## Langkah Eksekusi
-- [ ] `BorrowingService@borrow`: cek user belum punya pinjaman aktif untuk judul sama, cek `available_copies > 0`, cek max 3 pinjaman simultan, buat record (`borrowed_at = now`, `due_at = +7 hari`), `available_copies -= 1` — semua dalam DB transaction.
-- [ ] `BorrowingService@return`: set `returned_at`, `available_copies += 1`, hitung denda (Rp1.000/hari overdue), picu reservasi berikutnya (jika ada).
-- [ ] `BorrowingService@extend`: hanya 1x per pinjaman, `due_at += 7 hari`, set `extended = true`.
-- [ ] `BorrowingService@calculateFine`: `Rp1.000 × jumlah hari keterlambatan`.
-- [ ] Blokir pinjaman baru jika user punya keterlambatan > 7 hari.
-- [ ] Buat `AutoReturnOverdue` command: auto-return yang lewat due, set denda, jalankan via scheduler harian.
-- [ ] Buat email H-1 & overdue via Mailable + Resend.
-- [ ] Hubungkan tombol pinjam (task 02) ke `BorrowingService`.
-- [ ] Test: pinjam → stok berkurang; kembali → stok bertambah; extend sekali; denda terhitung benar.
+- [x] `BorrowingService@borrow`: cek stok (`available_copies > 0`), cek duplikat (belum pinjam judul sama), cek max 3 pinjaman aktif, blokir bila keterlambatan > 7 hari, `available_copies -= 1` (dalam DB transaction + `lockForUpdate`).
+- [x] `BorrowingService@return`: set `returned_at`, `available_copies += 1`, hitung denda.
+- [ ] (Ditunda) `BorrowingService@extend` — perpanjang 1x (tidak diminta iterasi ini).
+- [x] `BorrowingService@calculateFine`: Rp 1.000 × hari keterlambatan (ceil, min 1 hari).
+- [x] `BorrowingController` (bookshelf + borrow + returnBook) & route `/pinjam/{book}`, `/kembalikan/{borrowing}`, `/buku-saya`.
+- [x] Hubungkan tombol "Pinjam Buku" di `books/show.blade.php` (form POST + gating login/duplikat/stok).
+- [x] Halaman "Buku Saya" (`bookshelf/index.blade.php`): pinjaman aktif + tombol Kembalikan + riwayat + denda.
+- [x] Flash message (success/error) di layout.
+- [ ] (Ditunda) `AutoReturnOverdue` command + scheduler (tidak diminta iterasi ini).
+- [ ] (Ditunda) Email H-1 & overdue via Mailable + Resend (tidak diminta iterasi ini).
+- [x] Test: borrow (stok 7→6), duplikat ditolak, return (stok balik 7), denda 2.5 hari → Rp3.000, alur HTTP POST pinjam/kembali + flash.
 
 ## Acceptance Criteria
 - User bisa pinjam jika stok tersedia & belum pinjam judul sama; `available_copies` berkurang 1.

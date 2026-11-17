@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\OneToMany;
 
 class Book extends Model
 {
@@ -71,6 +70,14 @@ class Book extends Model
                 'popular' => $q->withCount('borrowings')->orderByDesc('borrowings_count'),
                 default => $q->latest(),
             }, fn ($q) => $q->latest());
+    }
+
+    public function borrows(User $user): bool
+    {
+        return $this->borrowings()
+            ->where('user_id', $user->id)
+            ->whereNull('returned_at')
+            ->exists();
     }
 
     /**

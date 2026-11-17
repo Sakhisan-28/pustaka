@@ -29,6 +29,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/baca/{book}', [\App\Http\Controllers\ReaderController::class, 'show'])->name('books.read');
     Route::get('/baca/{book}/file', [\App\Http\Controllers\ReaderController::class, 'file'])->name('books.file');
     Route::post('/baca/{book}/progress', [\App\Http\Controllers\ReadingProgressController::class, 'update'])->name('books.progress');
+
+    // Sirkulasi: pinjam, kembali, bookshelf
+    Route::get('/buku-saya', [\App\Http\Controllers\BorrowingController::class, 'index'])->name('bookshelf');
+    Route::post('/pinjam/{book}', [\App\Http\Controllers\BorrowingController::class, 'borrow'])->name('books.borrow');
+    Route::post('/kembalikan/{borrowing}', [\App\Http\Controllers\BorrowingController::class, 'returnBook'])->name('borrowings.return');
 });
 
 require __DIR__.'/auth.php';
