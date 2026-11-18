@@ -5,9 +5,7 @@
 
 @section('content')
     @php
-        $coverUrl = $book->cover_url
-            ? \Illuminate\Support\Facades\Storage::disk('public')->url($book->cover_url)
-            : null;
+        $coverUrl = $book->coverUrl();
     @endphp
 
     {{-- Breadcrumb --}}

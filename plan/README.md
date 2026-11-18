@@ -24,6 +24,7 @@
 | 03 | [03-user-auth.md](./03-user-auth.md) | Auth User (Breeze + Google OAuth) | P0 | ✅ Done |
 | 04 | [04-reader-ui.md](./04-reader-ui.md) | Reader PDF / EPUB di Browser | P0 | ✅ Done |
 | 05 | [05-borrowing-logic.md](./05-borrowing-logic.md) | Logika Pinjam / Kembali / Denda | P0 | ✅ Done |
+| 06 | [06-google-books-api.md](./06-google-books-api.md) | Integrasi Open Library API | P1 | ✅ Done |
 
 > **Catatan urutan:** PRD menomori sesuai fokus fitur, tetapi untuk implementasi disarankan mengerjakan **03 (auth) lebih dulu**, lalu 01 → 02 → 05 → 04, karena tombol pinjam (02) dan reader (04) bergantung pada auth (03) dan logic pinjam (05).
 
@@ -47,6 +48,7 @@
 | PST-403 | Kembali buku + denda | ✅ Done |
 | PST-408 | UI tombol Pinjam + halaman Buku Saya (bookshelf) | ✅ Done |
 | PST-404/405/406/407 | Extend, reservasi, cron auto-return, email | ⏳ Deferred |
+| — | Lookup metadata buku via Open Library API (Filament) | ✅ Done |
 | — | Fix schema `category_id` nullable + storage lokal | ✅ Done |
 
 ---

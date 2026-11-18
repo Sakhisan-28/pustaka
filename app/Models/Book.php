@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Book extends Model
 {
@@ -86,6 +87,17 @@ class Book extends Model
     public function isAvailable(): bool
     {
         return $this->available_copies > 0;
+    }
+
+    public function coverUrl(): ?string
+    {
+        if (! $this->cover_url) {
+            return null;
+        }
+
+        return filter_var($this->cover_url, FILTER_VALIDATE_URL)
+            ? $this->cover_url
+            : Storage::disk('public')->url($this->cover_url);
     }
 
     /**
