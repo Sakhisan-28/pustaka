@@ -47,20 +47,11 @@ class Book extends Model
     }
 
     /**
-     * Filter katalog: search (judul/penulis/ISBN/kategori), filter kategori,
-     * filter ketersediaan, dan sorting.
+     * Filter katalog: filter kategori/ketersediaan dan sorting.
      */
     public function scopeFilter($query, array $filters)
     {
         $query
-            ->when($filters['search'] ?? null, function ($q, $search) {
-                $q->where(function ($sub) use ($search) {
-                    $sub->where('title', 'ilike', "%{$search}%")
-                        ->orWhere('author', 'ilike', "%{$search}%")
-                        ->orWhere('isbn', 'ilike', "%{$search}%")
-                        ->orWhereHas('category', fn ($c) => $c->where('name', 'ilike', "%{$search}%"));
-                });
-            })
             ->when($filters['category'] ?? null, fn ($q, $category) => $q->whereHas(
                 'category',
                 fn ($c) => $c->where('slug', $category)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookController extends Controller
 {
@@ -14,10 +15,21 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['search', 'category', 'available', 'sort']);
+        $search = trim((string) ($filters['search'] ?? ''));
 
         $books = Book::query()
             ->with('category')
-            ->filter($filters)
+            ->when($search !== '', function ($query) use ($search) {
+                $term = '%' . Str::lower($search) . '%';
+
+                $query->where(function ($group) use ($term) {
+                    $group->whereRaw('LOWER(title) LIKE ?', [$term])
+                        ->orWhereRaw('LOWER(author) LIKE ?', [$term])
+                        ->orWhereRaw('LOWER(isbn) LIKE ?', [$term])
+                        ->orWhereHas('category', fn ($category) => $category->whereRaw('LOWER(name) LIKE ?', [$term]));
+                });
+            })
+            ->filter($request->only(['category', 'available', 'sort']))
             ->paginate(12)
             ->withQueryString();
 
