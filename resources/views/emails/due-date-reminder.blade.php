@@ -77,8 +77,14 @@
                     <tr>
                         <td style="padding:20px 32px 0;">
                             <p style="margin:0;font-size:13px;line-height:1.6;color:#7E776A;">
-                                Terlambat mengembalikan? Denda Rp1.000 per hari berlaku otomatis.
-                                Kalau butuh waktu lebih, kamu bisa perpanjang 1× dari halaman Buku Saya.
+                                @if($borrowing->extended)
+                                    Buku ini sudah diperpanjang 1× dan tidak bisa diperpanjang lagi.
+                                    Segera kembalikan untuk menghindari denda Rp1.000 per hari.
+                                @else
+                                    Butuh waktu lebih? Kamu masih bisa memperpanjang 1× (tambah 7 hari)
+                                    selama buku belum jatuh tempo, langsung dari halaman Buku Saya.
+                                    Terlambat mengembalikan dikenai denda Rp1.000 per hari.
+                                @endif
                             </p>
                         </td>
                     </tr>

@@ -50,6 +50,19 @@
                                     📖 Baca
                                 </a>
                             @endif
+                            @if($borrowing->extended)
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-warm-100 border border-warm-200 text-xs font-medium text-warm-600">
+                                    Sudah Diperpanjang
+                                </span>
+                            @elseif($borrowing->due_at && now()->lessThan($borrowing->due_at))
+                                <form method="POST" action="{{ route('borrowings.extend', $borrowing) }}">
+                                    @csrf
+                                    <button type="submit"
+                                            class="inline-flex items-center gap-2 px-4 py-2 border border-amber-400 text-amber-700 bg-amber-50 rounded-lg text-sm font-medium hover:bg-amber-100 transition">
+                                        🕒 Perpanjang 1x
+                                    </button>
+                                </form>
+                            @endif
                             <form method="POST" action="{{ route('borrowings.return', $borrowing) }}">
                                 @csrf
                                 <button type="submit"

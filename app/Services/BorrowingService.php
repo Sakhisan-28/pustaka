@@ -104,6 +104,36 @@ class BorrowingService
     }
 
     /**
+     * Perpanjang masa pinjam 1× (tambah LOAN_DAYS hari).
+     *
+     * @throws \RuntimeException
+     */
+    public function extend(Borrowing $borrowing): Borrowing
+    {
+        return DB::transaction(function () use ($borrowing) {
+            $borrowing = Borrowing::whereKey($borrowing->id)->lockForUpdate()->firstOrFail();
+
+            if ($borrowing->returned_at !== null) {
+                throw new \RuntimeException('Buku ini sudah dikembalikan.');
+            }
+
+            if ($borrowing->extended) {
+                throw new \RuntimeException('Buku ini sudah pernah diperpanjang.');
+            }
+
+            if (! $borrowing->due_at || $borrowing->due_at->isPast()) {
+                throw new \RuntimeException('Buku sudah melewati jatuh tempo dan tidak bisa diperpanjang.');
+            }
+
+            $borrowing->due_at = $borrowing->due_at->copy()->addDays(self::LOAN_DAYS);
+            $borrowing->extended = true;
+            $borrowing->save();
+
+            return $borrowing;
+        });
+    }
+
+    /**
      * Hitung denda keterlambatan (Rp 1.000 per hari, minimal 1 hari jika terlambat).
      */
     public function calculateFine(Borrowing $borrowing): float

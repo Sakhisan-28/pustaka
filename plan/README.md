@@ -27,6 +27,7 @@
 | 06 | [06-google-books-api.md](./06-google-books-api.md) | Integrasi Open Library API | P1 | ✅ Done |
 | 07 | [07-bulk-update-covers.md](./07-bulk-update-covers.md) | Bulk Update Covers | P1 | ✅ Done |
 | 08 | [08-email-notifications.md](./08-email-notifications.md) | Email Notification (Resend) | P1 | 🚧 In Progress |
+| 09 | [09-extend-borrowing.md](./09-extend-borrowing.md) | Perpanjang Peminjaman (Extend) | P1 | 🚧 In Progress |
 
 > **Catatan urutan:** PRD menomori sesuai fokus fitur, tetapi untuk implementasi disarankan mengerjakan **03 (auth) lebih dulu**, lalu 01 → 02 → 05 → 04, karena tombol pinjam (02) dan reader (04) bergantung pada auth (03) dan logic pinjam (05).
 
@@ -50,6 +51,7 @@
 | PST-403 | Kembali buku + denda | ✅ Done |
 | PST-408 | UI tombol Pinjam + halaman Buku Saya (bookshelf) | ✅ Done |
 | PST-404/405/406/407 | Extend, reservasi, cron auto-return, email | ⏳ Deferred |
+| PST-404 | Perpanjang pinjaman 1× (7 hari) + tombol di Buku Saya | 🚧 In Progress |
 | PST-407 (partial) | Email pengingat jatuh tempo H-1 via Resend + command terjadwal | 🚧 In Progress |
 | — | Lookup metadata buku via Open Library API (Filament) | ✅ Done |
 | — | Bulk update cover buku via Artisan command | ✅ Done |

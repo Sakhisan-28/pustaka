@@ -102,4 +102,84 @@ class BorrowingTest extends TestCase
         $response = $this->actingAs($user)->get('/buku-saya');
         $response->assertOk();
     }
+
+    public function test_extend_adds_seven_days_and_marks_extended(): void
+    {
+        $service = app(BorrowingService::class);
+        $user = User::factory()->create();
+        $borrowing = $service->borrow($user, $this->makeBook(7, 7));
+
+        $originalDue = $borrowing->due_at->copy();
+
+        $extended = $service->extend($borrowing);
+
+        $this->assertTrue($extended->fresh()->extended);
+        $this->assertSame(
+            $originalDue->addDays(7)->format('Y-m-d H:i'),
+            $extended->fresh()->due_at->format('Y-m-d H:i')
+        );
+    }
+
+    public function test_extend_rejects_returned_borrowing(): void
+    {
+        $service = app(BorrowingService::class);
+        $user = User::factory()->create();
+        $borrowing = $service->borrow($user, $this->makeBook(7, 7));
+        $service->returnBook($borrowing);
+
+        $this->expectException(\RuntimeException::class);
+        $service->extend($borrowing->fresh());
+    }
+
+    public function test_extend_rejects_second_extension(): void
+    {
+        $service = app(BorrowingService::class);
+        $user = User::factory()->create();
+        $borrowing = $service->borrow($user, $this->makeBook(7, 7));
+
+        $service->extend($borrowing);
+
+        $this->expectException(\RuntimeException::class);
+        $service->extend($borrowing->fresh());
+    }
+
+    public function test_extend_rejects_overdue_borrowing(): void
+    {
+        $service = app(BorrowingService::class);
+        $user = User::factory()->create();
+        $borrowing = $service->borrow($user, $this->makeBook(7, 7));
+
+        $borrowing->due_at = now()->subHour();
+        $borrowing->save();
+
+        $this->expectException(\RuntimeException::class);
+        $service->extend($borrowing->fresh());
+    }
+
+    public function test_extend_route_rejects_other_users_borrowing(): void
+    {
+        $owner = User::factory()->create();
+        $other = User::factory()->create();
+        $borrowing = app(BorrowingService::class)->borrow($owner, $this->makeBook(7, 7));
+
+        $this->actingAs($other)
+            ->post("/buku-saya/{$borrowing->id}/extend")
+            ->assertForbidden();
+    }
+
+    public function test_extend_route_sets_flash_and_updates_due_at(): void
+    {
+        $user = User::factory()->create();
+        $borrowing = app(BorrowingService::class)->borrow($user, $this->makeBook(7, 7));
+        $originalDue = $borrowing->due_at->copy();
+
+        $response = $this->actingAs($user)->post("/buku-saya/{$borrowing->id}/extend");
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success', 'Buku berhasil diperpanjang 7 hari.');
+        $this->assertSame(
+            $originalDue->addDays(7)->format('Y-m-d H:i'),
+            $borrowing->fresh()->due_at->format('Y-m-d H:i')
+        );
+    }
 }

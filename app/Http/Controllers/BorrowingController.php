@@ -67,4 +67,20 @@ class BorrowingController extends Controller
 
         return back()->with('success', $msg);
     }
+
+    /**
+     * Perpanjang masa pinjam 1× (tambah 7 hari).
+     */
+    public function extend(Request $request, Borrowing $borrowing)
+    {
+        abort_unless($borrowing->user_id === $request->user()->id, 403, 'Bukan pinjaman Anda.');
+
+        try {
+            $this->service->extend($borrowing);
+        } catch (\Throwable $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', 'Buku berhasil diperpanjang 7 hari.');
+    }
 }

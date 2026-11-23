@@ -45,6 +45,7 @@ class Borrowing extends Model
             'due_at' => 'datetime',
             'returned_at' => 'datetime',
             'fine_amount' => 'decimal:2',
+            'extended' => 'boolean',
         ];
     }
 }

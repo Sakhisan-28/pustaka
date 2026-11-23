@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/buku-saya', [\App\Http\Controllers\BorrowingController::class, 'index'])->name('bookshelf');
     Route::post('/pinjam/{book}', [\App\Http\Controllers\BorrowingController::class, 'borrow'])->name('books.borrow');
     Route::post('/kembalikan/{borrowing}', [\App\Http\Controllers\BorrowingController::class, 'returnBook'])->name('borrowings.return');
+    Route::post('/buku-saya/{borrowing}/extend', [\App\Http\Controllers\BorrowingController::class, 'extend'])->name('borrowings.extend');
 });
 
 require __DIR__.'/auth.php';
