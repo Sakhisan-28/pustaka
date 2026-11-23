@@ -12,9 +12,8 @@
 
     <header class="bg-white border-b border-warm-200 sticky top-0 z-20">
         <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white font-serif font-bold text-lg">P</span>
-                <span class="font-serif text-xl font-bold text-warm-900">Pustaka</span>
+            <a href="{{ url('/') }}" class="flex items-center">
+                <img src="{{ asset('logo-pustaka.svg') }}" alt="Pustaka" class="h-9 w-auto">
             </a>
 
             <div class="flex items-center gap-4 sm:gap-6 text-sm">

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,9 +28,29 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Pustaka')
+            ->brandLogo(asset('logo-pustaka.svg'))
+            ->brandLogoHeight('2.5rem')
+            ->defaultThemeMode(ThemeMode::Light)
+            ->darkMode(false)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#3B82F6'),
+                'gray' => [
+                    50 => '250, 248, 245',
+                    100 => '245, 241, 234',
+                    200 => '231, 224, 213',
+                    300 => '214, 204, 189',
+                    400 => '168, 160, 147',
+                    500 => '126, 119, 107',
+                    600 => '92, 87, 77',
+                    700 => '59, 54, 46',
+                    800 => '34, 31, 25',
+                    900 => '31, 41, 55',
+                    950 => '10, 9, 7',
+                ],
             ])
+            ->font('Inter')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

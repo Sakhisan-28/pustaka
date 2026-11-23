@@ -12,9 +12,8 @@
     <body class="font-sans text-warm-800 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-warm-50">
             <div>
-                <a href="/" class="flex items-center gap-2">
-                    <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-white font-serif font-bold text-xl">P</span>
-                    <span class="font-serif text-2xl font-bold text-warm-900">Pustaka</span>
+                <a href="/" class="flex items-center">
+                    <img src="{{ asset('logo-pustaka.svg') }}" alt="Pustaka" class="h-11 w-auto">
                 </a>
             </div>
 

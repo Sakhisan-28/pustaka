@@ -39,7 +39,7 @@ class BookResource extends Resource
                     ->hintAction(
                         Action::make('lookupIsbn')
                             ->label('Cari via ISBN')
-                            ->icon('heroicon-m-magnifying-glass')
+                            ->icon('heroicon-m-bookmark-square')
                             ->action(function (OpenLibraryService $openLibrary, Get $get, Set $set) {
                                 $isbn = strtoupper((string) preg_replace('/[^0-9Xx]/', '', (string) $get('isbn')));
 
