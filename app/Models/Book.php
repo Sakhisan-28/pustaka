@@ -80,15 +80,18 @@ class Book extends Model
         return $this->available_copies > 0;
     }
 
-    public function coverUrl(): ?string
+    public function coverUrl(string $size = 'M'): ?string
     {
         if (! $this->cover_url) {
             return null;
         }
 
-        return filter_var($this->cover_url, FILTER_VALIDATE_URL)
+        $url = filter_var($this->cover_url, FILTER_VALIDATE_URL)
             ? $this->cover_url
             : Storage::disk('public')->url($this->cover_url);
+
+        // Turunkan/atur kode ukuran cover Open Library (-L/-M/-S.jpg); URL lain (R2/lokal) dibiarkan.
+        return preg_replace('/-[LMS]\.jpg$/', "-{$size}.jpg", $url);
     }
 
     /**

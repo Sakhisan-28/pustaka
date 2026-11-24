@@ -28,6 +28,7 @@
 | 07 | [07-bulk-update-covers.md](./07-bulk-update-covers.md) | Bulk Update Covers | P1 | ✅ Done |
 | 08 | [08-email-notifications.md](./08-email-notifications.md) | Email Notification (Resend) | P1 | 🚧 In Progress |
 | 09 | [09-extend-borrowing.md](./09-extend-borrowing.md) | Perpanjang Peminjaman (Extend) | P1 | 🚧 In Progress |
+| 10 | [10-pre-deploy-polish.md](./10-pre-deploy-polish.md) | Pre-Deploy Polish (UI/UX & Performance) | P1 | 🚧 In Progress |
 
 > **Catatan urutan:** PRD menomori sesuai fokus fitur, tetapi untuk implementasi disarankan mengerjakan **03 (auth) lebih dulu**, lalu 01 → 02 → 05 → 04, karena tombol pinjam (02) dan reader (04) bergantung pada auth (03) dan logic pinjam (05).
 

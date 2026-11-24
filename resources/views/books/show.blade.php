@@ -5,7 +5,7 @@
 
 @section('content')
     @php
-        $coverUrl = $book->coverUrl();
+        $coverUrl = $book->coverUrl('L');
     @endphp
 
     {{-- Breadcrumb --}}

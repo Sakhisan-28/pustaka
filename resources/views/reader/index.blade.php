@@ -22,8 +22,9 @@
         <header class="shrink-0 bg-white border-b border-warm-200 px-3 sm:px-4 h-14 flex items-center justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0">
                 <a href="{{ route('books.show', $book) }}"
-                   class="text-warm-500 hover:text-primary transition shrink-0" title="Kembali ke detail">
-                    ← <span class="hidden sm:inline">Kembali</span>
+                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-warm-300 text-warm-700 hover:bg-warm-100 transition shrink-0"
+                   title="Tutup buku dan kembali ke detail">
+                    ← <span>Tutup Buku</span>
                 </a>
                 <span class="font-serif font-semibold text-warm-900 truncate">{{ $book->title }}</span>
             </div>
